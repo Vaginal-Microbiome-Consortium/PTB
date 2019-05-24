@@ -34,7 +34,7 @@ mefit <- read_delim("mefit_stats.txt", delim = "\t") %>%
 
 # read stirrups v2 profiles
 ssdata <- read_delim("stirrups_profiles.txt", delim = "\t") %>%
-  filter(SampleID %in% ptb47.okpt$SampleID & 
+  filter(SampleID %in% ptb45.okpt$SampleID & 
            SampleID %in% mefit$SampleID &
            ATprop > 0.01)
 
