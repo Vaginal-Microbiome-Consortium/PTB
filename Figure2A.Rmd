@@ -23,7 +23,7 @@ library(gridExtra)
 
 ```{r, echo=TRUE}
 
-# sample list for ptb47 cohort
+# sample list for ptb45 cohort
 ptb45 <- read_delim("sample_list.txt", delim="\t")
 
 # read stirrups v2 profiles
