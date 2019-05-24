@@ -1,0 +1,298 @@
+---
+title: "The vaginal microbiome and preterm birth"
+author: "Hardik I Parikh"
+date: "03/14/2019"
+output: html_document
+---
+
+## Extended Data Figure 2
+
+Species-level vaginal microbiome composition in women who experience term or preterm birth.  
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(reshape2)
+library(vegan)
+library(dendsort)
+library(ggpubr)
+library(cowplot)
+library(grid)
+library(gridExtra)
+```
+
+
+#### Load Data
+
+```{r, echo=TRUE}
+
+# sample list for ptb47 cohort
+ptb47.okpt <- read_delim("sample_list.txt", delim="\t")
+
+# read mefit stats for min 1000hq reads
+mefit <- read_delim("mefit_stats.txt", delim = "\t") %>%
+  filter(HQReads > 1000)
+
+# read stirrups v2 profiles
+ssdata <- read_delim("stirrups_profiles.txt", delim = "\t") %>%
+  filter(SampleID %in% ptb47.okpt$SampleID & 
+           SampleID %in% mefit$SampleID &
+           ATprop > 0.01)
+
+# Add L.delbrueckii to EP686265_K30_MV1D
+ssdata <- ssdata %>%
+  rbind(c("EP686265_K30_MV1D", "Lactobacillus_delbrueckii", 0, 0.0))
+ssdata$No_of_Reads <- as.numeric(ssdata$No_of_Reads)
+ssdata$ATprop <- as.numeric(ssdata$ATprop)
+
+
+# re-calculate proportions to 100.0
+tmp <- ssdata %>%
+  group_by(SampleID) %>%
+  summarise(TotalReads = sum(No_of_Reads))
+ssdata <- left_join(ssdata, tmp, by="SampleID") %>%
+  mutate(RelAb = (No_of_Reads/TotalReads)*100)
+#foo <- aggregate(ssdata$RelAb, by=list(SampleID=ssdata$SampleID), FUN=sum)
+
+# term/preterm subjects
+termstatus <- read_delim("metadata.txt", delim = "\t") %>%
+  filter(ParticipantID %in% ptb47.okpt$ParticipantID) %>%
+  mutate(preg = ifelse(Group == "control", "term", Group))
+
+# read custom colors
+taxacolors <- read_delim("taxa_colors.txt", delim = "\t")
+vtcolors <- read_delim("vt_colors.txt", delim = "\t")
+
+```
+
+#### Assign Vagitypes to each Sample
+
+```{r, echo=TRUE}
+
+### get vagitypes for each sample
+### Vagitype definition: >= 30% of dominant taxa
+getVagitype <- function(propData) {
+  ## identify vagitypes
+  vagTypes <- apply(propData, 1, which.max)
+  maxProp <- propData[matrix(c(1:nrow(propData),vagTypes), ncol=2)]
+  vagTypes <- colnames(propData)[vagTypes]
+  vagTypes[maxProp < 30.0] <- "No Type"
+  
+  ## my vagTypeDF
+  vagTypeDF <- data.frame(cbind(rownames(propData), vagTypes))
+  vagTypeDF$vagTypes.2 <- NA
+  for(i in 1:nrow(vagTypeDF)) {
+    if(grepl("crispatus", vagTypeDF[i,2])) {vagTypeDF[i,3] <- "L.crispatus"}
+    else if(grepl("iners", vagTypeDF[i,2])) {vagTypeDF[i,3] <- "L.iners"}
+    else if(grepl("jensenii", vagTypeDF[i,2])) {vagTypeDF[i,3] <- "L.jensenii"}
+    else if(grepl("gasseri", vagTypeDF[i,2])) {vagTypeDF[i,3] <- "L.gasseri"}
+    else if(grepl("BVAB1", vagTypeDF[i,2])) {vagTypeDF[i,3] <- "BVAB1"}
+    else if(grepl("vaginalis", vagTypeDF[i,2])) {vagTypeDF[i,3] <- "G.vaginalis"}
+    else if(grepl("vaginae", vagTypeDF[i,2])) {vagTypeDF[i,3] <- "A.vaginae"}
+    else if(grepl("Sneathia_amnii", vagTypeDF[i,2])) {vagTypeDF[i,3] <- "S.amnii"}
+    else if(grepl("No Type", vagTypeDF[i,2])) {vagTypeDF[i,3] <- "NoType"}
+    else {vagTypeDF[i,3] <- "Other"}
+  }
+  
+  ## set colnames
+  colnames(vagTypeDF) <- c("SampleID", "vagitype", "vagitype.2") 
+  
+  return(vagTypeDF)
+}
+
+propData <- acast(ssdata, SampleID~Taxa, value.var = "RelAb", fill=0.0)
+vagitypeDF <- getVagitype(propData)
+
+ssdata <- left_join(ssdata, vagitypeDF, by="SampleID")
+```
+
+#### Add pregnancy status, trimester,  custom colors
+
+```{r, echo=TRUE}
+# Add pregnancy status 
+ssdata <- ssdata %>%
+  rowwise() %>%
+  mutate(ParticipantID = strsplit(as.character(SampleID), "_")[[1]][1]) 
+termstatus <- termstatus %>%
+  filter(ParticipantID %in% ssdata$ParticipantID) %>%
+  select(ParticipantID, preg) %>%
+  unique()
+ssdata <- left_join(ssdata, termstatus, by="ParticipantID") %>%
+  mutate(preg = factor(preg, levels = c("term", "preterm")))
+
+# add trimester
+triDF <- ptb47.okpt %>%
+  select(SampleID, trueGA, trimester)
+ssdata <- left_join(ssdata, triDF, by="SampleID") %>%
+  mutate(trimester = factor(trimester, levels = c("1st_tri", "2nd_tri", "3rd_tri")))
+
+
+# Add custom colors
+ssdata <- left_join(ssdata, taxacolors, by="Taxa") %>%
+  mutate(TaxaColor = ifelse(is.na(TaxaColor), "#faf0e6", TaxaColor)) 
+
+ssdata <- left_join(ssdata, vtcolors, by="vagitype")
+
+```
+
+#### Sort Samples by Vagitype
+
+```{r, echo=TRUE}
+uniq.vagitypes <- ssdata %>%
+  select(vagitype.2) %>%
+  unique()
+
+# set default vagitype order
+myVTOrder <- c("L.crispatus", "L.iners", "L.jensenii", "L.gasseri", "BVAB1", "G.vaginalis", "A.vaginae", "S.amnii", "Other", "NoType")
+
+# get sample order
+sampleOrder <- vector(mode="character", length=0)
+
+for (x in myVTOrder) {
+  if (x %in% uniq.vagitypes$vagitype.2) {
+    ssdata_subset <- ssdata %>%
+      filter(vagitype.2 == x)
+    if (length(unique(ssdata_subset$SampleID)) > 1) {
+      propData.subset <- acast(ssdata_subset, SampleID~Taxa, value.var = "RelAb", fill=0.0)
+      bcdist <- vegdist(propData.subset, method="bray")
+      hclustBC <- hclust(bcdist, method="ward.D2")
+      dd <- dendsort(as.dendrogram(hclustBC))
+      hclustBC.order <- as.hclust(dd)
+      sampleOrder <- c(sampleOrder, hclustBC.order$labels[c(hclustBC.order$order)])
+    } 
+    else {
+      sampleOrder <- c(sampleOrder, as.character(unique(ssdata_subset$SampleID)))
+    }
+  }
+}
+
+# set sample order
+ssdata <- ssdata %>%
+  mutate(SampleID = factor(SampleID, levels = sampleOrder)) 
+ssdata$TaxaColor <- as.factor(ssdata$TaxaColor)
+```
+
+
+#### Alpha Diversity
+
+```{r, echo=TRUE}
+forAlphaDiv <- acast(ssdata, SampleID~Taxa, value.var = "RelAb", fill=0.0) 
+
+# shannon index
+shannon <- as.data.frame(diversity(forAlphaDiv, index = "shannon")) %>%
+  magrittr::set_colnames(c("alphadiv")) %>%
+  mutate(SampleID = rownames(.)) %>%
+  mutate(Index = "Shannon")
+# invsim index
+invsim <- as.data.frame(diversity(forAlphaDiv, index = "invsim")) %>%
+  magrittr::set_colnames(c("alphadiv")) %>%
+  mutate(SampleID = rownames(.)) %>%
+  mutate(Index = "InvSim")
+
+# create divDF
+divDF <- bind_rows(shannon, invsim) %>%
+  mutate(Index = factor(Index, levels=c("Shannon", "InvSim"))) %>%
+  mutate_at("SampleID", funs(as.factor))
+
+
+# add preg, trimester
+mdata <- ssdata %>%
+  select(SampleID, preg, trimester) %>%
+  unique()
+divDF <- left_join(divDF, mdata, by="SampleID")
+
+```
+
+#### Ext Data Figure2
+
+```{r, echo=TRUE, fig.width=12, fig.height=4}
+
+# Shannon Index:
+divDF.shannon <- divDF %>%
+  filter(Index == "Shannon")
+
+mycomp1 <- list(c("1st_tri", "2nd_tri"), c("2nd_tri", "3rd_tri"), c("1st_tri", "3rd_tri"))
+mycomp2 <- list(c("preterm", "term"))
+# c("#4393c3", "#d6604d")
+
+extdatafig2_tr_l <- ggboxplot(divDF.shannon, x="trimester", y="alphadiv", 
+                        color = "preg", palette = c("#4393c3", "#d6604d"),
+                        add="jitter", outlier.shape=NA) + 
+  #stat_compare_means(comparisons = mycomp1, label = "p.signif") + 
+  facet_grid(~preg, scales = "free_y") + 
+  theme_bw() + 
+  theme(axis.text.x=element_text(face="bold",size=14),
+        axis.text.y=element_text(face="bold",size=12),
+        axis.title=element_text(face="bold", size=16),
+        legend.position = "none",
+        plot.title = element_text(face="bold", size=20),
+        strip.text = element_blank()) + 
+  labs(x="Trimester", y="Alpha Diversity") +
+  ggtitle("")
+extdatafig2_tr_r <- ggboxplot(divDF.shannon, x="preg", y="alphadiv", 
+                        color = "preg", palette = c("#4393c3", "#d6604d"),
+                        add="jitter", outlier.shape=NA) + 
+  #stat_compare_means(comparisons = mycomp2, label = "p.signif") + 
+  facet_grid(~trimester, scales = "free_y") + 
+  theme_bw() + 
+  theme(axis.text.x=element_text(face="bold",size=14),
+        axis.text.y=element_text(face="bold",size=12),
+        axis.title=element_text(face="bold", size=16),
+        legend.position = "none",
+        plot.title = element_text(face="bold", size=20),
+        strip.text = element_blank()) + 
+  labs(x="Pregnancy", y="") + 
+  ggtitle("")
+
+extdatafig2_tr <- plot_grid(extdatafig2_tr_l, extdatafig2_tr_r, ncol = 2, rel_widths = c(1,1))
+```
+
+
+```{r, fig.width=12, fig.height=4}
+# InvSim Index:
+divDF.invsim <- divDF %>%
+  filter(Index == "InvSim")
+
+mycomp1 <- list(c("1st_tri", "2nd_tri"), c("2nd_tri", "3rd_tri"), c("1st_tri", "3rd_tri"))
+mycomp2 <- list(c("preterm", "term"))
+#  c("#4393c3", "#d6604d")
+
+extdatafig2_br_l <- ggboxplot(divDF.invsim, x="trimester", y="alphadiv", 
+                        color = "preg", palette = c("#4393c3", "#d6604d"),
+                        add="jitter", outlier.shape=NA) + 
+  #stat_compare_means(comparisons = mycomp1, label = "p.signif") + 
+  facet_grid(~preg, scales = "free_y") + 
+  theme_bw() + 
+  theme(axis.text.x=element_text(face="bold",size=14),
+        axis.text.y=element_text(face="bold",size=12),
+        axis.title=element_text(face="bold", size=16),
+        legend.position = "none",
+        plot.title = element_text(face="bold", size=20),
+        strip.text = element_blank()) + 
+  labs(x="Trimester", y="Alpha Diversity") +
+  ggtitle("")
+extdatafig2_br_r <- ggboxplot(divDF.invsim, x="preg", y="alphadiv", 
+                        color = "preg", palette = c("#4393c3", "#d6604d"),
+                        add="jitter", outlier.shape=NA) + 
+  #stat_compare_means(comparisons = mycomp2, label = "p.signif") + 
+  facet_grid(~trimester, scales = "free_y") + 
+  theme_bw() + 
+  theme(axis.text.x=element_text(face="bold",size=14),
+        axis.text.y=element_text(face="bold",size=12),
+        axis.title=element_text(face="bold", size=16),
+        legend.position = "none",
+        plot.title = element_text(face="bold", size=20),
+        strip.text = element_blank()) + 
+  labs(x="Pregnancy", y="") + 
+  ggtitle("")
+
+extdatafig2_br <- plot_grid(extdatafig2_br_l, extdatafig2_br_r, ncol = 2, rel_widths = c(1,1))
+```
+
+
+```{r, echo=TRUE, fig.width=12, fig.height=8}
+ggsave("ExtDataFigure2a.eps", extdatafig3_tr, units = "in", width = 14, height = 4, dpi = 600)
+ggsave("ExtDataFigure2b.eps", extdatafig3_br, units = "in", width = 14, height = 4, dpi = 600)
+
+```
+
+
