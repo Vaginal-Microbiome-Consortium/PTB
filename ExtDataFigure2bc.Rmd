@@ -25,8 +25,8 @@ library(gridExtra)
 
 ```{r, echo=TRUE}
 
-# sample list for ptb47 cohort
-ptb47.okpt <- read_delim("sample_list.txt", delim="\t")
+# sample list for ptb45 cohort
+ptb45.okpt <- read_delim("sample_list.txt", delim="\t")
 
 # read mefit stats for min 1000hq reads
 mefit <- read_delim("mefit_stats.txt", delim = "\t") %>%
@@ -55,7 +55,7 @@ ssdata <- left_join(ssdata, tmp, by="SampleID") %>%
 
 # term/preterm subjects
 termstatus <- read_delim("metadata.txt", delim = "\t") %>%
-  filter(ParticipantID %in% ptb47.okpt$ParticipantID) %>%
+  filter(ParticipantID %in% ptb45.okpt$ParticipantID) %>%
   mutate(preg = ifelse(Group == "control", "term", Group))
 
 # read custom colors
@@ -120,7 +120,7 @@ ssdata <- left_join(ssdata, termstatus, by="ParticipantID") %>%
   mutate(preg = factor(preg, levels = c("term", "preterm")))
 
 # add trimester
-triDF <- ptb47.okpt %>%
+triDF <- ptb45.okpt %>%
   select(SampleID, trueGA, trimester)
 ssdata <- left_join(ssdata, triDF, by="SampleID") %>%
   mutate(trimester = factor(trimester, levels = c("1st_tri", "2nd_tri", "3rd_tri")))
