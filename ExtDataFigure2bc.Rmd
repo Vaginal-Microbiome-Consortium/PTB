@@ -290,8 +290,8 @@ extdatafig2_br <- plot_grid(extdatafig2_br_l, extdatafig2_br_r, ncol = 2, rel_wi
 
 
 ```{r, echo=TRUE, fig.width=12, fig.height=8}
-ggsave("ExtDataFigure2a.eps", extdatafig3_tr, units = "in", width = 14, height = 4, dpi = 600)
-ggsave("ExtDataFigure2b.eps", extdatafig3_br, units = "in", width = 14, height = 4, dpi = 600)
+ggsave("ExtDataFigure2a.eps", extdatafig2_tr, units = "in", width = 14, height = 4, dpi = 600)
+ggsave("ExtDataFigure2b.eps", extdatafig2_br, units = "in", width = 14, height = 4, dpi = 600)
 
 ```
 
