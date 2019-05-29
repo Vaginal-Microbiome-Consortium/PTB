@@ -1,0 +1,30 @@
+Value,Shortname,Shortname2,fontface,col,x,y,Omic,names,pch,size
+Aerococcus_christensenii,Achr,A.c.,italic,#053061,0.65617562,-0.15465677,Bacterial taxon,Aerococcus_christensenii,20,3
+Atopobium_vaginae,Avag,A.v.,italic,#053061,0.79925303,-0.35807499,Bacterial taxon,Atopobium_vaginae,20,3
+Clostridiales_BVAB2,BVAB2,,plain,#053061,0.52730281,-0.25541288,Bacterial taxon,Clostridiales_BVAB2,20,3
+Coriobacteriaceae_OTU27,CO27,,plain,#053061,0.66663176,-0.32584877,Bacterial taxon,Coriobacteriaceae_OTU27,20,3
+Corynebacterium_cluster45,C45,,plain,#053061,-0.01910939,-0.03369438,Bacterial taxon,Corynebacterium_cluster45,20,3
+Dialister_cluster51,DcI51,,plain,#053061,0.53415477,-0.48853464,Bacterial taxon,Dialister_cluster51,20,3
+Dialister_micraerophilus,Dmic,,italic,#053061,0.50988612,-0.34551968,Bacterial taxon,Dialister_micraerophilus,20,3
+Gardnerella_vaginalis,Gvag,G.v.,italic,#053061,0.87326468,-0.26711871,Bacterial taxon,Gardnerella_vaginalis,20,3
+Lactobacillus_crispatus_cluster,Lcri,L.c.,italic,#053061,-0.78580403,-0.42516643,Bacterial taxon,Lactobacillus_crispatus_cluster,20,3
+Lactobacillus_gasseri_cluster,Lgas,L.g.,italic,#053061,-0.17873791,0.13444245,Bacterial taxon,Lactobacillus_gasseri_cluster,20,3
+Lactobacillus_iners,Line,L.i.,italic,#053061,0.30260659,0.91278546,Bacterial taxon,Lactobacillus_iners,20,3
+Lactobacillus_jensenii,Ljen,L.j.,italic,#053061,-0.22398124,0.41822412,Bacterial taxon,Lactobacillus_jensenii,20,3
+Megasphaera_OTU70_type1,Mty1,M_ty1,plain,#053061,0.75718256,-0.16557039,Bacterial taxon,Megasphaera_OTU70_type1,20,3
+Prevotella_amnii,Pamn,P.a.,italic,#053061,0.40341639,-0.23023388,Bacterial taxon,Prevotella_amnii,20,3
+Prevotella_cluster2,Pcl2,P.c2,plain,#053061,0.51241044,-0.48453485,Bacterial taxon,Prevotella_cluster2,20,3
+Prevotella_cluster50,P50,,plain,#053061,0.139161,-0.29230496,Bacterial taxon,Prevotella_cluster50,20,3
+Prevotella_corporis,Pcor,,italic,#053061,-0.01496638,-0.25242631,Bacterial taxon,Prevotella_corporis,20,3
+Sneathia_amnii,Samn,S.a.,italic,#053061,0.46482754,-0.23658652,Bacterial taxon,Sneathia_amnii,20,3
+Staphylococcus_cluster47,S47,,plain,#053061,-0.16576371,-0.05367888,Bacterial taxon,Staphylococcus_cluster47,20,3
+TM7_OTU-H1,TM7-H1,TM7,plain,#053061,0.25620295,-0.04060597,Bacterial taxon,TM7_OTU-H1,20,3
+Eotaxin,Eotaxin,Eotaxin,plain,#67001f,0.58914867,0.29106498,Cytokine,Eotaxin,18,3
+IL-17A,IL-17A,IL-17A,plain,#67001f,0.75004583,0.17716065,Cytokine,IL-17A,18,3
+IL-1b,IL-1b,IL-1b,plain,#67001f,0.94332157,-0.09715866,Cytokine,IL-1b,18,3
+IL-6,IL-6,IL-6,plain,#67001f,0.47985587,-0.19018147,Cytokine,IL-6,18,3
+IL-8,IL-8,IL-8,plain,#67001f,0.68672525,0.49765333,Cytokine,IL-8,18,3
+IP-10,IP-10,IP-10,plain,#67001f,0.29864853,0.79662191,Cytokine,IP-10,18,3
+MIP-1b,MIP-1b,MIP-1b,plain,#67001f,0.65030496,0.47458034,Cytokine,MIP-1b,18,3
+RANTES,RANTES,RANTES,plain,#67001f,0.40843767,0.11937035,Cytokine,RANTES,18,3
+TNF-a,TNF-a,TNF-a,plain,#67001f,0.67753138,0.34386243,Cytokine,TNF-a,18,3
