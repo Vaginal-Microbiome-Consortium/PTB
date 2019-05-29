@@ -1,0 +1,57 @@
+Body_Site_Omic,Trimester,Group,Number_of_Samples
+maternal vaginal 16S,First Trimester,Term Birth Study,43
+maternal vaginal MGS,First Trimester,Term Birth Study,43
+maternal vaginal MTS,First Trimester,Term Birth Study,0
+maternal vaginal cytokines,First Trimester,Term Birth Study,42
+maternal buccal 16S,First Trimester,Term Birth Study,44
+maternal buccal cytokines,First Trimester,Term Birth Study,2
+maternal rectal 16S,First Trimester,Term Birth Study,42
+maternal plasma cytokines,First Trimester,Term Birth Study,22
+ ,First Trimester,Term Birth Study,700
+infant buccal 16S,First Trimester,Term Birth Study,0
+infant rectal 16S,First Trimester,Term Birth Study,0
+infant stool 16S,First Trimester,Term Birth Study,0
+infant stool MGS,First Trimester,Term Birth Study,0
+infant buccal cytokines,First Trimester,Term Birth Study,0
+maternal vaginal 16S,Second Trimester,Term Birth Study,165
+maternal vaginal MGS,Second Trimester,Term Birth Study,161
+maternal vaginal MTS,Second Trimester,Term Birth Study,6
+maternal vaginal cytokines,Second Trimester,Term Birth Study,162
+maternal buccal 16S,Second Trimester,Term Birth Study,167
+maternal buccal cytokines,Second Trimester,Term Birth Study,0
+maternal rectal 16S,Second Trimester,Term Birth Study,162
+maternal plasma cytokines,Second Trimester,Term Birth Study,30
+ ,Second Trimester,Term Birth Study,700
+infant buccal 16S,Second Trimester,Term Birth Study,0
+infant rectal 16S,Second Trimester,Term Birth Study,0
+infant stool 16S,Second Trimester,Term Birth Study,0
+infant stool MGS,Second Trimester,Term Birth Study,0
+infant buccal cytokines,Second Trimester,Term Birth Study,0
+maternal vaginal 16S,Third Trimester,Term Birth Study,228
+maternal vaginal MGS,Third Trimester,Term Birth Study,224
+maternal vaginal MTS,Third Trimester,Term Birth Study,50
+maternal vaginal cytokines,Third Trimester,Term Birth Study,225
+maternal buccal 16S,Third Trimester,Term Birth Study,243
+maternal buccal cytokines,Third Trimester,Term Birth Study,55
+maternal rectal 16S,Third Trimester,Term Birth Study,224
+maternal plasma cytokines,Third Trimester,Term Birth Study,54
+ ,Third Trimester,Term Birth Study,700
+infant buccal 16S,Third Trimester,Term Birth Study,0
+infant rectal 16S,Third Trimester,Term Birth Study,0
+infant stool 16S,Third Trimester,Term Birth Study,0
+infant stool MGS,Third Trimester,Term Birth Study,0
+infant buccal cytokines,Third Trimester,Term Birth Study,0
+maternal vaginal 16S,Postpartum,Term Birth Study,0
+maternal vaginal MGS,Postpartum,Term Birth Study,0
+maternal vaginal MTS,Postpartum,Term Birth Study,0
+maternal vaginal cytokines,Postpartum,Term Birth Study,0
+maternal buccal 16S,Postpartum,Term Birth Study,79
+maternal buccal cytokines,Postpartum,Term Birth Study,79
+maternal rectal 16S,Postpartum,Term Birth Study,0
+maternal plasma cytokines,Postpartum,Term Birth Study,0
+ ,Postpartum,Term Birth Study,700
+infant buccal 16S,Postpartum,Term Birth Study,170
+infant rectal 16S,Postpartum,Term Birth Study,168
+infant stool 16S,Postpartum,Term Birth Study,149
+infant stool MGS,Postpartum,Term Birth Study,146
+infant buccal cytokines,Postpartum,Term Birth Study,173

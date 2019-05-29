@@ -1,0 +1,45 @@
+Body_Site_Omic,Trimester,Group,Number_of_Samples
+maternal vaginal 16S,First Trimester,Other,92
+maternal vaginal cytokines,First Trimester,Other,22
+maternal vaginal lipids,First Trimester,Other,41
+maternal buccal 16S,First Trimester,Other,74
+maternal rectal 16S,First Trimester,Other,56
+maternal cervical 16S,First Trimester,Other,42
+maternal chest 16S,First Trimester,Other,3
+ ,First Trimester,Other,700
+infant buccal 16S,First Trimester,Other,0
+infant rectal 16S,First Trimester,Other,0
+infant stool 16S,First Trimester,Other,0
+maternal vaginal 16S,Second Trimester,Other,346
+maternal vaginal cytokines,Second Trimester,Other,35
+maternal vaginal lipids,Second Trimester,Other,22
+maternal buccal 16S,Second Trimester,Other,314
+maternal rectal 16S,Second Trimester,Other,253
+maternal cervical 16S,Second Trimester,Other,62
+maternal chest 16S,Second Trimester,Other,1
+ ,Second Trimester,Other,700
+infant buccal 16S,Second Trimester,Other,0
+infant rectal 16S,Second Trimester,Other,0
+infant stool 16S,Second Trimester,Other,0
+maternal vaginal 16S,Third Trimester,Other,625
+maternal vaginal cytokines,Third Trimester,Other,31
+maternal vaginal lipids,Third Trimester,Other,0
+maternal buccal 16S,Third Trimester,Other,620
+maternal rectal 16S,Third Trimester,Other,489
+maternal cervical 16S,Third Trimester,Other,50
+maternal chest 16S,Third Trimester,Other,36
+ ,Third Trimester,Other,700
+infant buccal 16S,Third Trimester,Other,0
+infant rectal 16S,Third Trimester,Other,0
+infant stool 16S,Third Trimester,Other,0
+maternal vaginal 16S,Postpartum,Other,86
+maternal vaginal cytokines,Postpartum,Other,0
+maternal vaginal lipids,Postpartum,Other,0
+maternal buccal 16S,Postpartum,Other,194
+maternal rectal 16S,Postpartum,Other,50
+maternal cervical 16S,Postpartum,Other,7
+maternal chest 16S,Postpartum,Other,115
+ ,Postpartum,Other,700
+infant buccal 16S,Postpartum,Other,612
+infant rectal 16S,Postpartum,Other,581
+infant stool 16S,Postpartum,Other,423
