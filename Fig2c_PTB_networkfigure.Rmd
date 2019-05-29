@@ -1,0 +1,86 @@
+---
+title: "REBACCA_PTB"
+author: "Abigail Glascock"
+date: "Tuesday, November 14, 2017, updated 2019"
+output: html_document
+---
+
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+
+###Read in data as csv 
+dat <-read.table("FILE.txt", header=TRUE, sep="\t", row.names=1)
+
+### Loading in necessary packages and scripts
+require(MCMCpack)
+require(glmnet)
+require(parallel)
+source("REBACCA.R")
+source("REBACCA_sim.R")
+### Load in necessary packages for network figure
+library(GGally)
+library(ggplot2)
+library(network)
+
+### Creating data structure 
+x <-data.matrix(data)
+
+### Run REBACCA on dataset (proportions)
+x.rslt = rebacca(x, nbootstrap=50, N.cores=1)
+tau = stability_cutoff(x.rslt$Stability, x.rslt$q, B=50, FWER=0.05)
+x.adj = sscore2adjmatrix(x.rslt$Stability, tau)
+x.est = rebacca_adjm2corr(x, x.adj)
+
+### Observe predicted correlations
+x.est$corr
+
+### Rename matrix rows and columns to create network figure
+rownames(x.est$corr) <-rownames(data)
+colnames(x.est$corr) <-rownames(data)
+
+write.csv(x.est$corr, "prev_rebacca.csv")
+
+### Grabbed only correlations to PTB taxa, read in as csv
+three <-read.csv("prev_rebacca_nocutoff.csv", header=TRUE, row.names=1)
+
+###Create matrix
+three_matrix <-data.matrix(three)
+net=network(three_matrix)
+
+###Assign groups to taxa, WITH PTB Taxa from Model
+
+net %v% "stat"= ifelse(network.vertex.names(net) %in% c("Sneathia_amnii","TM7_OTU.H1", "Lachnospiraceae_BVAB1", "Prevotella_cluster2"), "Preterm Predictive Taxa", ifelse (network.vertex.names(net) %in% c("Actinomycetales_OTU158","Anaerococcus_OTU147", "Campylobacter_ureolyticus", "Corynebacterium_coyleae", "Corynebacterium_thomssenii_sundsvallense", "Dialister_propionicifaciens", "Lactobacillus_coleohominis", "Lactobacillus_crispatus_cluster", "Lactobacillus_gasseri_cluster", "Lactobacillus_jensenii", "Lactobacillus_jensenii.fornicalis.psittaci", "Lactobacillus_vaginalis", "Prevotella_bivia", "Prevotella_melaninogenica_cluster",  "Staphylococcus_cluster47", "Streptococcus_anginosus", "Streptococcus_cluster29", "Streptococcus_salivarius_thermophilus_vestibularis", "Ureaplasma_cluster23", "Ureaplasma_urealyticum"), "Negatively Correlated Taxa", ifelse(network.vertex.names(net) %in% c("Clostridiales_BVAB2", "Coriobacteriaceae_OTU27", "Dialister_cluster51", "Dialister_micraerophilus","Gardnerella_vaginalis", "Megasphaera_OTU71_type2","Megasphaera_OTU70_type1", "Prevotellaceae_OTU61", "Aerococcus_christensenii", "Atopobium_vaginae", "Gemella_OTU86", "Mycoplasma_hominis", "Parvimonas_OTU142", "Prevotella_OTU49", "Prevotella_amnii", "Prevotella_cluster50", "Sneathia_sanguinegens"), "Positively Correlated Taxa", ifelse(network.vertex.names(net) %in% c("Lactobacillus_iners", "Prevotella_disiens"), "Mixed Correlation Taxa", "Not"))))
+
+ggnet2(net, label=TRUE ,mode="fruchtermanreingold",label.size=3.5, color="stat", palette=c("Positively Correlated Taxa"="#0570b0", "Preterm Predictive Taxa"="#bdbdbd", "Negatively Correlated Taxa"="#de2d26", "Mixed Correlation Taxa"="#f5f5f5", "Not"="#f5f5f5"), size="stat",size.palette=c("Preterm Predictive Taxa"=30, "Negatively Correlated Taxa"=10, "Positively Correlated Taxa"=10, "Mixed Correlation Taxa" = 10, "Not"=10))
+
+### WITH CUTOFF
+
+net %v% "stat"= ifelse(network.vertex.names(net) %in% c("Sneathia_amnii","TM7_OTU.H1", "Lachnospiraceae_BVAB1", "Prevotella_cluster2"), "Preterm Predictive Taxa", ifelse (network.vertex.names(net) %in% c("Corynebacterium_thomssenii_sundsvallense", "Lactobacillus_coleohominis", "Lactobacillus_crispatus_cluster","Lactobacillus_jensenii", "Lactobacillus_jensenii.fornicalis.psittaci", "Lactobacillus_vaginalis", "Prevotella_melaninogenica_cluster",  "Staphylococcus_cluster47", "Streptococcus_cluster29", "Streptococcus_salivarius_thermophilus_vestibularis", "Ureaplasma_cluster23", "Ureaplasma_urealyticum"), "Negatively Correlated Taxa", ifelse(network.vertex.names(net) %in% c("Clostridiales_BVAB2", "Coriobacteriaceae_OTU27", "Dialister_cluster51", "Dialister_micraerophilus","Gardnerella_vaginalis", "Megasphaera_OTU71_type2","Megasphaera_OTU70_type1", "Prevotellaceae_OTU61", "Aerococcus_christensenii", "Atopobium_vaginae", "Gemella_OTU86", "Mycoplasma_hominis", "Parvimonas_OTU142", "Prevotella_amnii", "Prevotella_cluster50", "Sneathia_sanguinegens"), "Positively Correlated Taxa", "Not")))
+
+###Draw Network Figure
+ggnet2(net, label=TRUE ,mode="fruchtermanreingold",label.size=3.5, color="stat", palette=c("Positively Correlated Taxa"="#0570b0", "Preterm Predictive Taxa"="#bdbdbd", "Negatively Correlated Taxa"="#de2d26", "Not"="#f5f5f5"), size="stat",size.palette=c("Preterm Predictive Taxa"=30, "Negatively Correlated Taxa"=10, "Positively Correlated Taxa"=10, "Not"=10))
+
+
+
+### NEW DATASET ### WITHOUT 30 CUTOFF ####
+
+net %v% "stat"= ifelse(network.vertex.names(net) %in% c("Sneathia_amnii","Lactobacillus_iners", "Lactobacillus_jensenii", "Gardnerella_vaginalis", "Ureaplasma_cluster23", "Lachnospiraceae_BVAB1", "Prevotella_cluster2"), "Preterm Predictive Taxa", ifelse (network.vertex.names(net) %in% c("Gemella_morbillorum_sanguinis_haemolysans", "Lactobacillus_crispatus_cluster", "Lactobacillus_vaginalis" ,"Peptoniphilus_indolicus", "Streptococcus_salivarius_thermophilus_vestibularis", "Ureaplasma_urealyticum"), "Negatively Correlated Taxa", ifelse(network.vertex.names(net) %in% c("Clostridiales_BVAB2", "Coriobacteriaceae_OTU27", "Clostridiales_BVAB3", "Dialister_micraerophilus","Megasphaera_OTU71_type2", "Prevotellaceae_OTU61", "Aerococcus_christensenii", "Gemella_OTU86", "Mycoplasma_hominis", "Parvimonas_OTU142","TM7_OTU.H1", "Prevotella_amnii", "Prevotella_cluster50", "Sneathia_sanguinegens"), "Positively Correlated Taxa", ifelse(network.vertex.names(net) %in% c("Atopobium_vaginae", "Dialister_cluster51", "Lactobacillus_coleohominis", "Megasphaera_OTU70_type1", "Ureaplasma_parvum.parvumUreaplasma"), "Mixed Correlation Taxa", "Not"))))
+
+
+
+ggnet2(net, label=TRUE ,mode="fruchtermanreingold",label.size=3.5, color="stat", palette=c("Positively Correlated Taxa"="#0570b0", "Preterm Predictive Taxa"="#bdbdbd", "Negatively Correlated Taxa"="#de2d26", "Mixed Correlation Taxa"="#f5f5f5", "Not"="#f5f5f5"), size="stat",size.palette=c("Preterm Predictive Taxa"=30, "Negatively Correlated Taxa"=10, "Positively Correlated Taxa"=10, "Mixed Correlation Taxa" = 10, "Not"=10))
+
+### WITHOUT CUTOFF ###
+
+net %v% "stat"= ifelse(network.vertex.names(net) %in% c("Sneathia_amnii","TM7_OTU.H1", "Lachnospiraceae_BVAB1", "Prevotella_cluster2"), "Preterm Predictive Taxa", ifelse (network.vertex.names(net) %in% c("Actinomycetales_OTU158","Anaerococcus_OTU147", "Campylobacter_ureolyticus", "Corynebacterium_coyleae", "Corynebacterium_thomssenii_sundsvallense", "Dialister_propionicifaciens", "Lactobacillus_coleohominis", "Lactobacillus_crispatus_cluster", "Lactobacillus_gasseri_cluster", "Lactobacillus_jensenii", "Lactobacillus_jensenii.fornicalis.psittaci", "Lactobacillus_vaginalis", "Prevotella_bivia", "Prevotella_melaninogenica_cluster",  "Staphylococcus_cluster47", "Streptococcus_anginosus", "Streptococcus_cluster29", "Streptococcus_salivarius_thermophilus_vestibularis", "Ureaplasma_cluster23", "Ureaplasma_urealyticum"), "Negatively Correlated Taxa", ifelse(network.vertex.names(net) %in% c("Clostridiales_BVAB2", "Coriobacteriaceae_OTU27", "Dialister_cluster51", "Dialister_micraerophilus","Gardnerella_vaginalis", "Megasphaera_OTU71_type2","Megasphaera_OTU70_type1", "Prevotellaceae_OTU61", "Aerococcus_christensenii", "Atopobium_vaginae", "Gemella_OTU86", "Mycoplasma_hominis", "Parvimonas_OTU142", "Prevotella_OTU49", "Prevotella_amnii", "Prevotella_cluster50", "Sneathia_sanguinegens"), "Positively Correlated Taxa", ifelse(network.vertex.names(net) %in% c("Lactobacillus_iners", "Prevotella_disiens"), "Mixed Correlation Taxa", "Not"))))
+
+
+
+ggnet2(net, label=TRUE ,mode="fruchtermanreingold",label.size=3.5, color="stat", palette=c("Positively Correlated Taxa"="#0570b0", "Preterm Predictive Taxa"="#bdbdbd", "Negatively Correlated Taxa"="#de2d26", "Mixed Correlation Taxa"="#f5f5f5", "Not"="#f5f5f5"), size="stat",size.palette=c("Preterm Predictive Taxa"=30, "Negatively Correlated Taxa"=10, "Positively Correlated Taxa"=10, "Mixed Correlation Taxa" = 10, "Not"=10))
+
+```
+
