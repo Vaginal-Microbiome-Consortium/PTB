@@ -1,0 +1,23 @@
+Body_Site,Samples,Visits,Pregnancies
+maternal vagina,49985,6292,1561
+maternal buccal mucosa,28397,7176,1568
+maternal rectum,11339,5727,1512
+maternal blood,29200,4076,1530
+maternal urine,11676,973,251
+maternal cervix,2491,1255,1057
+maternal chest,1406,703,703
+maternal dominant palm,1406,703,703
+maternal antecubital fossa,7858,3929,985
+maternal nares,8668,4334,992
+cord blood,2540,635,613
+amniotic fluid,6985,635,613
+placental membranes,1905,635,613
+placental tissue,1905,635,613
+umbilical cord,1905,635,613
+infant buccal mucosa,9847,2473,1259
+infant rectum,4004,2002,791
+infant meconium/stool,7676,2124,1154
+infant chest,4004,2002,791
+infant right palm,4004,2002,791
+infant nares,4004,2002,791
+infant respiratory secretions,1161,387,70
