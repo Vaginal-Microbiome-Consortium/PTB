@@ -1,0 +1,41 @@
+Body_Site_Omic,Trimester,Group,Number_of_Samples
+maternal vaginal 16S,First Trimester,Preterm Birth Study,48
+maternal vaginal MGS,First Trimester,Preterm Birth Study,45
+maternal vaginal MTS,First Trimester,Preterm Birth Study,5
+maternal vaginal cytokines,First Trimester,Preterm Birth Study,48
+maternal buccal 16S,First Trimester,Preterm Birth Study,47
+maternal rectal 16S,First Trimester,Preterm Birth Study,48
+ ,First Trimester,Preterm Birth Study,700
+infant buccal 16S,First Trimester,Preterm Birth Study,0
+infant rectal 16S,First Trimester,Preterm Birth Study,0
+infant stool 16S,First Trimester,Preterm Birth Study,0
+maternal vaginal 16S,Second Trimester,Preterm Birth Study,163
+maternal vaginal MGS,Second Trimester,Preterm Birth Study,155
+maternal vaginal MTS,Second Trimester,Preterm Birth Study,94
+maternal vaginal cytokines,Second Trimester,Preterm Birth Study,169
+maternal buccal 16S,Second Trimester,Preterm Birth Study,170
+maternal rectal 16S,Second Trimester,Preterm Birth Study,167
+ ,Second Trimester,Preterm Birth Study,700
+infant buccal 16S,Second Trimester,Preterm Birth Study,0
+infant rectal 16S,Second Trimester,Preterm Birth Study,0
+infant stool 16S,Second Trimester,Preterm Birth Study,0
+maternal vaginal 16S,Third Trimester,Preterm Birth Study,325
+maternal vaginal MGS,Third Trimester,Preterm Birth Study,296
+maternal vaginal MTS,Third Trimester,Preterm Birth Study,144
+maternal vaginal cytokines,Third Trimester,Preterm Birth Study,326
+maternal buccal 16S,Third Trimester,Preterm Birth Study,339
+maternal rectal 16S,Third Trimester,Preterm Birth Study,308
+ ,Third Trimester,Preterm Birth Study,700
+infant buccal 16S,Third Trimester,Preterm Birth Study,0
+infant rectal 16S,Third Trimester,Preterm Birth Study,0
+infant stool 16S,Third Trimester,Preterm Birth Study,0
+maternal vaginal 16S,Postpartum,Preterm Birth Study,0
+maternal vaginal MGS,Postpartum,Preterm Birth Study,0
+maternal vaginal MTS,Postpartum,Preterm Birth Study,0
+maternal vaginal cytokines,Postpartum,Preterm Birth Study,0
+maternal buccal 16S,Postpartum,Preterm Birth Study,122
+maternal rectal 16S,Postpartum,Preterm Birth Study,0
+ ,Postpartum,Preterm Birth Study,700
+infant buccal 16S,Postpartum,Preterm Birth Study,253
+infant rectal 16S,Postpartum,Preterm Birth Study,240
+infant stool 16S,Postpartum,Preterm Birth Study,215
